@@ -76,7 +76,6 @@ if "-t" in argv or "--timer" in argv:
     if var.timer >= 1:
         slideshow = True
 
-
 if "-p" in argv or "--path" in argv:
     pos = findpos("-p")
     if findpos("--path") >= pos:
@@ -84,7 +83,6 @@ if "-p" in argv or "--path" in argv:
     verbose(f"path set to {argv[pos + 1]}", False, 1)
     path = str(argv[pos + 1])
     pathSet = True
-
 
 # interactive set path
 if not pathSet:
@@ -130,6 +128,3 @@ if slideshow:
     slideshowloop()
 else:
     setwallpaper()
-
-
-
