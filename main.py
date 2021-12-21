@@ -3,7 +3,6 @@ import ctypes
 import random
 import time
 from sys import argv
-from colorama import Fore, Style
 import config as var
 
 verbosity = 0
@@ -18,7 +17,7 @@ timerSet = False
 
 def verbose(msg: str, warn: bool, level: int):
     if warn and verbosity:
-        print(f"{Fore.YELLOW}{msg}{Style.RESET_ALL}")
+        print(f"\033[93m{msg}\033[0m")
     elif verbosity >= level:
         print(msg)
 
