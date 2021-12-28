@@ -1,4 +1,4 @@
-import os
+from os import name, path, walk, system
 import ctypes
 import random
 import time
@@ -7,7 +7,7 @@ import config as var
 
 verbosity = 0
 # sanitizing path to convert \ to /
-path = var.path.replace("\\", "/")
+impath = var.path.replace("\\", "/")
 slideshow = False  # slideshow mode
 argNum = len(argv)  # number of arguments for finding out arguments given
 imageList = list()  # list of all images found to folder with the images to be used as wallpaper
@@ -44,8 +44,11 @@ def setwallpaper():
     """
     wallpaper = random.choice(imageList)
     verbose(f"Wallpaper = {wallpaper}", False, 1)
-    if os.path.exists(wallpaper):
-        ctypes.windll.user32.SystemParametersInfoW(20, 0, wallpaper, 3)
+    if path.exists(wallpaper):
+        if name == "nt":
+            ctypes.windll.user32.SystemParametersInfoW(20, 0, wallpaper, 3)
+        elif name == "posix":
+            system(f"feh --bg-fill -rz {wallpaper}")
     else:
         verbose("Warning: File no longer exists.", True, 1)
 
@@ -80,15 +83,15 @@ if "-p" in argv or "--path" in argv:
     if findpos("--path") >= pos:
         pos = findpos("--path")
     verbose(f"path set to {argv[pos + 1]}", False, 1)
-    path = str(argv[pos + 1])
+    impath = str(argv[pos + 1])
     pathSet = True
 
 # interactive set path
 if not pathSet:
-    string = str(input(f"Input a path: (leave blank for default path: {path})\n:"))
+    string = str(input(f"Input a path: (leave blank for default path: {impath})\n:"))
     if string:
         verbose("path manualy set", False, 1)
-        path = string
+        impath = string
     else:
         verbose("using deafult path", False, 1)
 
@@ -101,12 +104,12 @@ if not timerSet:
         slideshow = True
 
 # checking if path exists
-if not os.path.exists(path):
+if not path.exists(impath):
     exit("Error: path to files does not exist")
 
 # Get the list of all files in directory tree at given path
-for (dirpath, dirnames, filenames) in os.walk(path):
-    imageList += [os.path.join(dirpath, file) for file in filenames]
+for (dirpath, dirnames, filenames) in walk(impath):
+    imageList += [path.join(dirpath, file) for file in filenames]
 verbose(f"images found:\n{imageList}", False, 2)
 
 # making sure only jpg and png are in the list
