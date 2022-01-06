@@ -5,7 +5,6 @@ import time
 from sys import argv
 import config as var
 
-verbosity = 0
 # sanitizing path to convert \ to /
 impath = var.path.replace("\\", "/")
 slideshow = False  # slideshow mode
@@ -16,9 +15,9 @@ timerSet = False
 
 
 def verbose(msg: str, warn: bool, level: int):
-    if warn and verbosity:
+    if warn and var.verbosity:
         print(f"\033[93m{msg}\033[0m")
-    elif verbosity >= level:
+    elif var.verbosity >= level:
         print(msg)
 
 
@@ -114,7 +113,7 @@ verbose(f"images found:\n{imageList}", False, 2)
 
 # making sure only jpg and png are in the list
 for file in imageList:
-    if ".png" not in file or ".jpg" not in file:
+    if not file.find(".png") and not file.find(".jpg"):
         imageList.remove(file)
 
 # makes sure there is any image left in the path
